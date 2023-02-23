@@ -1,0 +1,46 @@
+@use "node_modules/animate.css/animate.css";
+
+$font-family: "Verdana", sans-serif;
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+body {
+  align-items: center;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  font-family: $font-family;
+  justify-content: center;
+}
+
+.widget {
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 1px;
+  padding: 10px;
+  text-align: center;
+  width: 200px;
+}
+
+.widget > .title {
+  font-weight: 700;
+  line-height: 2rem;
+}
+
+.shown {
+  opacity: 1;
+}
+
+.hidden {
+  opacity: 0;
+}
