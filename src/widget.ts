@@ -61,6 +61,30 @@ function QRCodeWidget(options: WidgetOptions) {
     textContent: widgetParams.title,
   });
 
+  widgetTitle.append(titleElement);
+
+  widgetContent.style.color = primaryColor.toString();
+  widgetContent.style.borderColor = borderColor.toString();
+  widgetContent.style.backgroundColor = secondaryColor.toString();
+  widgetContent.append(widgetTitle, widgetQRCode, widgetMessage);
+
+  widget.append(widgetContent);
+
+  const qrCode = new QRCodeStyling({
+    type: "svg",
+    data: widgetParams.url,
+    dotsOptions: {
+      color: primaryColor.toString(),
+      type: "rounded",
+    },
+    backgroundOptions: {
+      color: secondaryColor.toString(),
+    },
+    width: widgetQRCode.offsetWidth,
+    height: widgetQRCode.offsetWidth,
+  });
+  qrCode.append(widgetQRCode);
+
   async function showMessage(index = 0) {
     const isVisible = !widgetContent.classList.contains("hidden");
     const totalMessages = widgetParams.messages.length;
@@ -92,17 +116,11 @@ function QRCodeWidget(options: WidgetOptions) {
   function showWidget() {
     widgetContent.classList.remove("hidden");
     showMessage();
-    widgetContent.addEventListener(
-      "animationstart",
-      () => {
-        fitty(titleElement, {
-          multiLine: false,
-          minSize: 12,
-          maxSize: 64,
-        });
-      },
-      { once: true }
-    );
+    fitty(titleElement, {
+      multiLine: false,
+      minSize: 12,
+      maxSize: 64,
+    });
     animateCss(widgetContent, "animate__bounceIn").then(() => {
       widgetContent.classList.add("shown");
       setTimeout(() => hideWidget(), widgetParams.show * 6e4);
@@ -117,31 +135,7 @@ function QRCodeWidget(options: WidgetOptions) {
     });
   }
 
-  window.onload = () => {
-    widgetTitle.append(titleElement);
-    widgetContent.style.color = primaryColor.toString();
-    widgetContent.style.borderColor = borderColor.toString();
-    widgetContent.style.backgroundColor = secondaryColor.toString();
-    widgetContent.append(widgetTitle, widgetQRCode, widgetMessage);
-    widget.append(widgetContent);
-
-    const qrCode = new QRCodeStyling({
-      type: "svg",
-      data: widgetParams.url,
-      dotsOptions: {
-        color: primaryColor.toString(),
-        type: "rounded",
-      },
-      backgroundOptions: {
-        color: secondaryColor.toString(),
-      },
-      width: widgetQRCode.offsetWidth,
-      height: widgetQRCode.offsetWidth,
-    });
-    qrCode.append(widgetQRCode);
-
-    showWidget();
-  };
+  showWidget();
 }
 
 (window as any).QRCodeWidget = QRCodeWidget;
