@@ -1,6 +1,6 @@
-# qrwidget
+# QRWidget
 
-QR code widget for StreamElements: https://dev.streamelements.com/docs/widgets/3cf52461e4e34-before-starting
+QR code widget for StreamElements: https://dev.streamelements.com/docs/widgets/3cf52461e4e34-before-starting#custom-widget
 
 ### HTML
 
@@ -19,27 +19,11 @@ QR code widget for StreamElements: https://dev.streamelements.com/docs/widgets/3
 
 ```js
 window.addEventListener("onWidgetLoad", function (obj) {
-  const {
-    fieldData: {
-      url,
-      title,
-      primary,
-      secondary,
-      show,
-      hide,
-      message1,
-      message2,
-    },
-  } = obj.detail;
-  QRCodeWidget({
-    url,
-    title,
-    primary,
-    secondary,
-    messages: [message1, message2],
-    show,
-    hide,
-  });
+  const { fieldData: options } = obj.detail;
+  options.messages = Object.entries(options)
+    .map(([key, value]) => (key.startsWith("message") ? value : null))
+    .filter((e) => e);
+  QRCodeWidget(options);
 });
 ```
 
