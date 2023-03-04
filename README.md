@@ -61,12 +61,14 @@ window.addEventListener("onWidgetLoad", function (obj) {
   "primary": {
     "type": "colorpicker",
     "label": "QR/Text color",
-    "value": "#000000"
+    "value": "#000000",
+    "group": "Config"
   },
   "secondary": {
     "type": "colorpicker",
     "label": "Background Color",
-    "value": "#FFFFFF"
+    "value": "#FFFFFF",
+    "group": "Config"
   },
   "show": {
     "type": "slider",
