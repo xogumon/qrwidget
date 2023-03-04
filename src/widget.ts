@@ -138,7 +138,7 @@ function QRCodeWidget(options: WidgetOptions) {
   });
   qrCode.append(widgetQRCode);
 
-  showWidget();
+  onload = () => showWidget();
 }
 
 (window as any).QRCodeWidget = QRCodeWidget;

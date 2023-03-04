@@ -3642,7 +3642,7 @@ function QRCodeWidget(options) {
         height: widgetQRCode.offsetWidth,
     });
     qrCode.append(widgetQRCode);
-    showWidget();
+    onload = () => showWidget();
 }
 window.QRCodeWidget = QRCodeWidget;
 

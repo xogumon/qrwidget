@@ -1,14 +1,14 @@
 {
-  "name": "qr.widget",
-  "version": "0.0.1",
-  "description": "QR Code Widget para Navegador do OBS Studio ou Streamlabs",
+  "name": "qrwidget",
+  "version": "0.0.2",
+  "description": "QR Code Widget para StreamElements",
   "author": "Ronis Xogum <ronis@xog.one>",
   "scripts": {
     "build": "gulp",
     "dev": "gulp dev"
   },
   "type": "module",
-  "main": "src/main.ts",
+  "main": "src/widget.ts",
   "license": "MIT",
   "private": true,
   "devDependencies": {
