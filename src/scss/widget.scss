@@ -1,0 +1,57 @@
+@use "node_modules/animate.css/animate.css";
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;600;900&display=swap");
+
+$font-family: "Exo 2", sans-serif;
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+body {
+  font-family: $font-family;
+  align-items: center;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.widget {
+  width: 200px;
+  text-align: center;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.widget,
+.widget > .title,
+.widget > .title > span,
+.widget > .qrcode,
+.widget > .message,
+.widget > .message > span {
+  max-width: 100%;
+}
+
+.widget > .title {
+  font-weight: 700;
+  line-height: 2rem;
+  box-sizing: content-box;
+}
+
+.shown {
+  opacity: 1;
+}
+
+.hidden {
+  opacity: 0;
+}
