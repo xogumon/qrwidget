@@ -21,7 +21,7 @@ QR code widget for StreamElements: https://dev.streamelements.com/docs/widgets/3
 window.addEventListener("onWidgetLoad", function (obj) {
   const { fieldData: options } = obj.detail;
   options.messages = Object.entries(options).reduce((acc, [key, value]) => {
-    if (key.startsWith("message")) {
+    if (key.startsWith("message") && String(value).length) {
       acc.push(value);
     }
     return acc;
