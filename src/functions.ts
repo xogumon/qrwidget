@@ -34,11 +34,7 @@ export async function animateCss(
   const animatedClass = `${prefix}animated`;
 
   node.classList.add(animatedClass, animationName);
-  await new Promise((resolve) =>
-    node.addEventListener("animationend", resolve, {
-      once: true,
-    })
-  );
+  await listenEvent("animationend", node);
   node.classList.remove(animatedClass, animationName);
 
   return node;
@@ -64,4 +60,52 @@ export function createElement<T extends keyof HTMLElementTagNameMap>(
   }
 
   return $el;
+}
+
+/**
+ * Espera por um evento específico em um elemento e retorna um Promise que é resolvido com o objeto do evento.
+ *
+ * @param {EventName} eventName - O nome do evento a ser ouvido.
+ * @param {Element} element - O elemento onde o evento será ouvido.
+ * @returns {Promise<Event>} - Uma promessa que será resolvida com o objeto do evento quando o evento for disparado.
+ */
+export async function listenEvent<EventName extends keyof HTMLElementEventMap>(
+  eventName: EventName,
+  element: Element | Window
+): Promise<Event> {
+  return new Promise<Event>((resolve) => {
+    element.addEventListener(
+      eventName,
+      (event: Event) => {
+        resolve(event);
+      },
+      {
+        once: true,
+      }
+    );
+  });
+}
+
+/**
+ * Observa um elemento HTML e emite eventos quando ele fica visível ou invisível.
+ *
+ * @param {HTMLElement} target - O elemento HTML a ser observado.
+ * @param {string} [rootMargin='0px'] - O espaço em pixels a ser adicionado às margens do elemento de interseção.
+ * @param {number} [threshold=0] - O limite de interseção em que os eventos serão emitidos. Pode ser um valor entre 0 e 1.
+ * @returns {IntersectionObserver} Um objeto com os métodos `disconnect` e `observe` que podem ser usados para controlar o IntersectionObserver.
+ */
+export function emitVisibilityEvents(
+  target: HTMLElement,
+  rootMargin: string = "0px",
+  threshold: number = 0
+): IntersectionObserver {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      const eventName = entry.isIntersecting ? "visible" : "hidden";
+      target.dispatchEvent(new CustomEvent(eventName, { detail: target }));
+    },
+    { rootMargin, threshold }
+  );
+  observer.observe(target);
+  return observer;
 }

@@ -3476,7 +3476,7 @@ function _typeof2(obj) { "@babel/helpers - typeof"; return _typeof2 = "function"
 },{}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createElement = exports.animateCss = void 0;
+exports.emitVisibilityEvents = exports.listenEvent = exports.createElement = exports.animateCss = void 0;
 /**
  * Anima um elemento usando a biblioteca animate.css.
  *
@@ -3502,9 +3502,7 @@ async function animateCss($el, animationName, prefix = "animate__") {
     }
     const animatedClass = `${prefix}animated`;
     node.classList.add(animatedClass, animationName);
-    await new Promise((resolve) => node.addEventListener("animationend", resolve, {
-        once: true,
-    }));
+    await listenEvent("animationend", node);
     node.classList.remove(animatedClass, animationName);
     return node;
 }
@@ -3526,6 +3524,40 @@ function createElement(element, options) {
     return $el;
 }
 exports.createElement = createElement;
+/**
+ * Espera por um evento específico em um elemento e retorna um Promise que é resolvido com o objeto do evento.
+ *
+ * @param {EventName} eventName - O nome do evento a ser ouvido.
+ * @param {Element} element - O elemento onde o evento será ouvido.
+ * @returns {Promise<Event>} - Uma promessa que será resolvida com o objeto do evento quando o evento for disparado.
+ */
+async function listenEvent(eventName, element) {
+    return new Promise((resolve) => {
+        element.addEventListener(eventName, (event) => {
+            resolve(event);
+        }, {
+            once: true,
+        });
+    });
+}
+exports.listenEvent = listenEvent;
+/**
+ * Observa um elemento HTML e emite eventos quando ele fica visível ou invisível.
+ *
+ * @param {HTMLElement} target - O elemento HTML a ser observado.
+ * @param {string} [rootMargin='0px'] - O espaço em pixels a ser adicionado às margens do elemento de interseção.
+ * @param {number} [threshold=0] - O limite de interseção em que os eventos serão emitidos. Pode ser um valor entre 0 e 1.
+ * @returns {IntersectionObserver} Um objeto com os métodos `disconnect` e `observe` que podem ser usados para controlar o IntersectionObserver.
+ */
+function emitVisibilityEvents(target, rootMargin = "0px", threshold = 0) {
+    const observer = new IntersectionObserver(([entry]) => {
+        const eventName = entry.isIntersecting ? "visible" : "hidden";
+        target.dispatchEvent(new CustomEvent(eventName, { detail: target }));
+    }, { rootMargin, threshold });
+    observer.observe(target);
+    return observer;
+}
+exports.emitVisibilityEvents = emitVisibilityEvents;
 
 },{}],5:[function(require,module,exports){
 "use strict";
@@ -3533,6 +3565,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/*
+ * QRCodeWidget 0.0.6 - Ronis Xogum (2023)
+ */
 const fitty_1 = __importDefault(require("fitty"));
 const qr_code_styling_1 = __importDefault(require("qr-code-styling"));
 const tinycolor2_1 = __importDefault(require("tinycolor2"));
@@ -3557,12 +3592,12 @@ function QRCodeWidget(options) {
     }
     const primaryColor = (0, tinycolor2_1.default)(widgetParams.primary);
     const secondaryColor = (0, tinycolor2_1.default)(widgetParams.secondary);
-    const borderColor = primaryColor.clone().setAlpha(0.18);
+    const borderColor = primaryColor.clone().setAlpha(0.2);
     const widget = document.getElementById("widget");
     if (!widget)
         throw new Error();
     const widgetContent = (0, functions_1.createElement)("div", {
-        className: "widget",
+        className: "widget hidden",
     });
     const widgetMessage = (0, functions_1.createElement)("div", {
         className: "message",
@@ -3581,6 +3616,7 @@ function QRCodeWidget(options) {
     widgetContent.style.borderColor = borderColor.toString();
     widgetContent.style.backgroundColor = secondaryColor.toString();
     widgetContent.append(widgetTitle, widgetQRCode, widgetMessage);
+    const contentIsVisible = () => !widgetContent.classList.contains("hidden");
     widget.append(widgetContent);
     const qrCode = new qr_code_styling_1.default({
         type: "svg",
@@ -3598,9 +3634,8 @@ function QRCodeWidget(options) {
     qrCode.append(widgetQRCode);
     async function showMessage(index = 0) {
         var _a;
-        const isVisible = !widgetContent.classList.contains("hidden");
         const totalMessages = widgetParams.messages.length;
-        if (!isVisible)
+        if (!contentIsVisible())
             return (_a = widgetMessage.firstElementChild) === null || _a === void 0 ? void 0 : _a.remove();
         if (widgetMessage instanceof HTMLElement && !!totalMessages) {
             const prevMessageElement = widgetMessage.firstElementChild;
@@ -3622,16 +3657,11 @@ function QRCodeWidget(options) {
     }
     function showWidget() {
         widgetContent.classList.remove("hidden");
-        showMessage();
-        (0, fitty_1.default)(titleElement, {
-            multiLine: false,
-            minSize: 12,
-            maxSize: 64,
-        });
         (0, functions_1.animateCss)(widgetContent, "animate__bounceIn").then(() => {
             widgetContent.classList.add("shown");
             setTimeout(() => hideWidget(), widgetParams.show * 6e4);
         });
+        showMessage();
     }
     function hideWidget() {
         widgetContent.classList.remove("shown");
@@ -3640,7 +3670,14 @@ function QRCodeWidget(options) {
             setTimeout(() => showWidget(), widgetParams.hide * 6e4);
         });
     }
-    showWidget();
+    document.fonts.ready.then(() => {
+        (0, fitty_1.default)(titleElement, {
+            multiLine: false,
+            minSize: 12,
+            maxSize: 64,
+        });
+        showWidget();
+    });
 }
 window.QRCodeWidget = QRCodeWidget;
 

@@ -1695,21 +1695,21 @@ body {
 }
 
 body {
-  font-family: "Exo 2", sans-serif;
   align-items: center;
   background-color: transparent;
   display: flex;
   flex-direction: column;
+  font-family: "Exo 2", sans-serif;
   justify-content: center;
 }
 
 .widget {
-  width: 200px;
-  text-align: center;
+  border-radius: 10px;
   border-style: solid;
   border-width: 1px;
-  border-radius: 10px;
   padding: 10px;
+  text-align: center;
+  width: 200px;
 }
 
 .widget,
@@ -1724,7 +1724,6 @@ body {
 .widget > .title {
   font-weight: 700;
   line-height: 2rem;
-  box-sizing: content-box;
 }
 
 .shown {

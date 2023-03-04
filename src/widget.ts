@@ -1,3 +1,6 @@
+/*
+ * QRCodeWidget 0.0.6 - Ronis Xogum (2023)
+ */
 import fitty from "fitty";
 import QRCodeStyling from "qr-code-styling";
 import tinycolor from "tinycolor2";
@@ -38,14 +41,14 @@ function QRCodeWidget(options: WidgetOptions) {
   const primaryColor = tinycolor(widgetParams.primary);
   const secondaryColor = tinycolor(widgetParams.secondary);
 
-  const borderColor = primaryColor.clone().setAlpha(0.18);
+  const borderColor = primaryColor.clone().setAlpha(0.2);
 
   const widget = document.getElementById("widget");
 
   if (!widget) throw new Error();
 
   const widgetContent = createElement("div", {
-    className: "widget",
+    className: "widget hidden",
   });
   const widgetMessage = createElement("div", {
     className: "message",
@@ -56,7 +59,6 @@ function QRCodeWidget(options: WidgetOptions) {
   const widgetTitle = createElement("div", {
     className: "title",
   });
-
   const titleElement = createElement("span", {
     textContent: widgetParams.title,
   });
@@ -66,7 +68,10 @@ function QRCodeWidget(options: WidgetOptions) {
   widgetContent.style.color = primaryColor.toString();
   widgetContent.style.borderColor = borderColor.toString();
   widgetContent.style.backgroundColor = secondaryColor.toString();
+
   widgetContent.append(widgetTitle, widgetQRCode, widgetMessage);
+
+  const contentIsVisible = () => !widgetContent.classList.contains("hidden");
 
   widget.append(widgetContent);
 
@@ -86,9 +91,8 @@ function QRCodeWidget(options: WidgetOptions) {
   qrCode.append(widgetQRCode);
 
   async function showMessage(index = 0) {
-    const isVisible = !widgetContent.classList.contains("hidden");
     const totalMessages = widgetParams.messages.length;
-    if (!isVisible) return widgetMessage.firstElementChild?.remove();
+    if (!contentIsVisible()) return widgetMessage.firstElementChild?.remove();
     if (widgetMessage instanceof HTMLElement && !!totalMessages) {
       const prevMessageElement = widgetMessage.firstElementChild;
       if (prevMessageElement)
@@ -105,7 +109,6 @@ function QRCodeWidget(options: WidgetOptions) {
         minSize: 14,
         maxSize: 24,
       });
-
       setTimeout(
         () => showMessage((index + 1) % totalMessages),
         widgetParams.interval * 1e3
@@ -115,16 +118,11 @@ function QRCodeWidget(options: WidgetOptions) {
 
   function showWidget() {
     widgetContent.classList.remove("hidden");
-    showMessage();
-    fitty(titleElement, {
-      multiLine: false,
-      minSize: 12,
-      maxSize: 64,
-    });
     animateCss(widgetContent, "animate__bounceIn").then(() => {
       widgetContent.classList.add("shown");
       setTimeout(() => hideWidget(), widgetParams.show * 6e4);
     });
+    showMessage();
   }
 
   function hideWidget() {
@@ -135,7 +133,14 @@ function QRCodeWidget(options: WidgetOptions) {
     });
   }
 
-  showWidget();
+  document.fonts.ready.then(() => {
+    fitty(titleElement, {
+      multiLine: false,
+      minSize: 12,
+      maxSize: 64,
+    });
+    showWidget();
+  });
 }
 
 (window as any).QRCodeWidget = QRCodeWidget;
