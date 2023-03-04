@@ -3573,6 +3573,29 @@ function QRCodeWidget(options) {
     const widgetTitle = (0, functions_1.createElement)("div", {
         className: "title",
     });
+    const titleElement = (0, functions_1.createElement)("span", {
+        textContent: widgetParams.title,
+    });
+    widgetTitle.append(titleElement);
+    widgetContent.style.color = primaryColor.toString();
+    widgetContent.style.borderColor = borderColor.toString();
+    widgetContent.style.backgroundColor = secondaryColor.toString();
+    widgetContent.append(widgetTitle, widgetQRCode, widgetMessage);
+    widget.append(widgetContent);
+    const qrCode = new qr_code_styling_1.default({
+        type: "svg",
+        data: widgetParams.url,
+        dotsOptions: {
+            color: primaryColor.toString(),
+            type: "rounded",
+        },
+        backgroundOptions: {
+            color: secondaryColor.toString(),
+        },
+        width: widgetQRCode.offsetWidth,
+        height: widgetQRCode.offsetWidth,
+    });
+    qrCode.append(widgetQRCode);
     async function showMessage(index = 0) {
         var _a;
         const isVisible = !widgetContent.classList.contains("hidden");
@@ -3600,13 +3623,11 @@ function QRCodeWidget(options) {
     function showWidget() {
         widgetContent.classList.remove("hidden");
         showMessage();
-        widgetContent.addEventListener("animationstart", () => {
-            (0, fitty_1.default)(titleElement, {
-                multiLine: false,
-                minSize: 12,
-                maxSize: 64,
-            });
-        }, { once: true });
+        (0, fitty_1.default)(titleElement, {
+            multiLine: false,
+            minSize: 12,
+            maxSize: 64,
+        });
         (0, functions_1.animateCss)(widgetContent, "animate__bounceIn").then(() => {
             widgetContent.classList.add("shown");
             setTimeout(() => hideWidget(), widgetParams.show * 6e4);
@@ -3619,30 +3640,7 @@ function QRCodeWidget(options) {
             setTimeout(() => showWidget(), widgetParams.hide * 6e4);
         });
     }
-    const titleElement = (0, functions_1.createElement)("span", {
-        textContent: widgetParams.title,
-    });
-    widgetTitle.append(titleElement);
-    widgetContent.style.color = primaryColor.toString();
-    widgetContent.style.borderColor = borderColor.toString();
-    widgetContent.style.backgroundColor = secondaryColor.toString();
-    widgetContent.append(widgetTitle, widgetQRCode, widgetMessage);
-    widget.append(widgetContent);
-    const qrCode = new qr_code_styling_1.default({
-        type: "svg",
-        data: widgetParams.url,
-        dotsOptions: {
-            color: primaryColor.toString(),
-            type: "rounded",
-        },
-        backgroundOptions: {
-            color: secondaryColor.toString(),
-        },
-        width: widgetQRCode.offsetWidth,
-        height: widgetQRCode.offsetWidth,
-    });
-    qrCode.append(widgetQRCode);
-    onload = () => showWidget();
+    showWidget();
 }
 window.QRCodeWidget = QRCodeWidget;
 
