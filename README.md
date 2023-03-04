@@ -6,13 +6,13 @@ QR code widget for StreamElements: https://dev.streamelements.com/docs/widgets/3
 
 ```html
 <div id="widget"></div>
-<script src="https://cdn.jsdelivr.net/gh/xogumon/qrwidget@0.0.1/dist/widget.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/xogumon/qrwidget@0.0.3/dist/widget.min.js"></script>
 ```
 
 ### CSS
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/xogumon/qrwidget@0.0.1/dist/widget.min.css");
+@import url("https://cdn.jsdelivr.net/gh/xogumon/qrwidget@0.0.3/dist/widget.min.css");
 ```
 
 ### JS

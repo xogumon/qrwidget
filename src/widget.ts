@@ -57,6 +57,10 @@ function QRCodeWidget(options: WidgetOptions) {
     className: "title",
   });
 
+  const titleElement = createElement("span", {
+    textContent: widgetParams.title,
+  });
+
   async function showMessage(index = 0) {
     const isVisible = !widgetContent.classList.contains("hidden");
     const totalMessages = widgetParams.messages.length;
@@ -113,32 +117,31 @@ function QRCodeWidget(options: WidgetOptions) {
     });
   }
 
-  const titleElement = createElement("span", {
-    textContent: widgetParams.title,
-  });
-  widgetTitle.append(titleElement);
-  widgetContent.style.color = primaryColor.toString();
-  widgetContent.style.borderColor = borderColor.toString();
-  widgetContent.style.backgroundColor = secondaryColor.toString();
-  widgetContent.append(widgetTitle, widgetQRCode, widgetMessage);
-  widget.append(widgetContent);
+  window.onload = () => {
+    widgetTitle.append(titleElement);
+    widgetContent.style.color = primaryColor.toString();
+    widgetContent.style.borderColor = borderColor.toString();
+    widgetContent.style.backgroundColor = secondaryColor.toString();
+    widgetContent.append(widgetTitle, widgetQRCode, widgetMessage);
+    widget.append(widgetContent);
 
-  const qrCode = new QRCodeStyling({
-    type: "svg",
-    data: widgetParams.url,
-    dotsOptions: {
-      color: primaryColor.toString(),
-      type: "rounded",
-    },
-    backgroundOptions: {
-      color: secondaryColor.toString(),
-    },
-    width: widgetQRCode.offsetWidth,
-    height: widgetQRCode.offsetWidth,
-  });
-  qrCode.append(widgetQRCode);
+    const qrCode = new QRCodeStyling({
+      type: "svg",
+      data: widgetParams.url,
+      dotsOptions: {
+        color: primaryColor.toString(),
+        type: "rounded",
+      },
+      backgroundOptions: {
+        color: secondaryColor.toString(),
+      },
+      width: widgetQRCode.offsetWidth,
+      height: widgetQRCode.offsetWidth,
+    });
+    qrCode.append(widgetQRCode);
 
-  onload = () => showWidget();
+    showWidget();
+  };
 }
 
 (window as any).QRCodeWidget = QRCodeWidget;

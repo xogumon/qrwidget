@@ -1,6 +1,6 @@
 {
   "name": "qrwidget",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "QR Code Widget para StreamElements",
   "author": "Ronis Xogum <ronis@xog.one>",
   "scripts": {
