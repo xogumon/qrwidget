@@ -12,20 +12,24 @@ QR code widget for StreamElements: https://dev.streamelements.com/docs/widgets/3
 ### CSS
 
 ```css
-@import url("https://cdn.jsdelivr.net/gh/xogumon/qrwidget@0.1.0/dist/widget.min.css");
+@import"https://cdn.jsdelivr.net/gh/xogumon/qrwidget@0.1.0/dist/widget.min.css";
+@import"https://fonts.googleapis.com/css2?family={{titleFont}}&family={{messageFont}}";
+.widget > .title {
+  font-family: "{{titleFont}}", sans-serif;
+}
+.widget > .message {
+  font-family: "{{messageFont}}", sans-serif;
+}
 ```
 
 ### JS
 
 ```js
-window.addEventListener("onWidgetLoad", function (obj) {
-  const { fieldData: options } = obj.detail;
-  options.messages = Object.entries(options).reduce((acc, [key, value]) => {
-    if (key.startsWith("message") && String(value).length) {
-      acc.push(value);
-    }
-    return acc;
-  }, []);
+window.addEventListener('onWidgetLoad', function(event) {
+  const options = event.detail.fieldData;
+  options.messages = Object.entries(options)
+    .filter(([key, value]) => key.match(/^message\d+$/) && value)
+    .map(([key, value]) => value);
   QRCodeWidget(options);
 });
 ```
@@ -85,6 +89,18 @@ window.addEventListener("onWidgetLoad", function (obj) {
     "type": "text",
     "label": "Message 2:",
     "value": "leia o código com a câmera do celular.",
+    "group": "Config"
+  },
+  "titleFont": {
+    "type": "googleFont",
+    "label": "Title font:",
+    "value": "Roboto",
+    "group": "Config"
+  },
+  "messageFont": {
+    "type": "googleFont",
+    "label": "Message font:",
+    "value": "Roboto",
     "group": "Config"
   },
   "widgetName": {
