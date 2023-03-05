@@ -2,6 +2,8 @@
 
 QR code widget for StreamElements: https://dev.streamelements.com/docs/widgets/3cf52461e4e34-before-starting#custom-widget
 
+Paste the codes below into the corresponding fields in the 'custom widget':
+
 ### HTML
 
 ```html
@@ -12,8 +14,8 @@ QR code widget for StreamElements: https://dev.streamelements.com/docs/widgets/3
 ### CSS
 
 ```css
-@import"https://cdn.jsdelivr.net/gh/xogumon/qrwidget@0.1.0/dist/widget.min.css";
-@import"https://fonts.googleapis.com/css2?family={{titleFont}}&family={{messageFont}}";
+@import "https://cdn.jsdelivr.net/gh/xogumon/qrwidget@0.1.0/dist/widget.min.css";
+@import "https://fonts.googleapis.com/css2?family={{titleFont}}&family={{messageFont}}";
 .widget > .title {
   font-family: "{{titleFont}}", sans-serif;
 }
@@ -25,7 +27,7 @@ QR code widget for StreamElements: https://dev.streamelements.com/docs/widgets/3
 ### JS
 
 ```js
-window.addEventListener('onWidgetLoad', function(event) {
+window.addEventListener("onWidgetLoad", function (event) {
   const options = event.detail.fieldData;
   options.messages = Object.entries(options)
     .filter(([key, value]) => key.match(/^message\d+$/) && value)
@@ -115,3 +117,5 @@ window.addEventListener('onWidgetLoad', function(event) {
   }
 }
 ```
+
+![QRCodeWidget](assets/widget.png)

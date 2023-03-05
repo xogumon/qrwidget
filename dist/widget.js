@@ -3566,7 +3566,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /*
- * QRCodeWidget 0.0.6 - Ronis Xogum (2023)
+ * QRCodeWidget 0.1.1 - Ronis Xogum (2023)
  */
 const fitty_1 = __importDefault(require("fitty"));
 const qr_code_styling_1 = __importDefault(require("qr-code-styling"));

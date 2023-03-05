@@ -1,5 +1,5 @@
 /*
- * QRCodeWidget 0.0.6 - Ronis Xogum (2023)
+ * QRCodeWidget 0.1.1 - Ronis Xogum (2023)
  */
 import fitty from "fitty";
 import QRCodeStyling from "qr-code-styling";
